@@ -53,7 +53,10 @@ const register = async(req,res) =>{
             secure:true,
             sameSite:"none",
             maxAge:1*24*60*60*1000 //1 day
-        }).status(201).json({success:true,message:"User registered successfully."})
+        }).status(201).json({success:true,message:"User registered successfully.",user:{
+            name,
+            email
+        }})
 
     }catch(error){
         res.status(500).json({success:false,message:"Server error."})
