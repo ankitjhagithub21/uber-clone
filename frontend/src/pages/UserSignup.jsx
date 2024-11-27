@@ -29,6 +29,7 @@ const UserSignup = () => {
       const data = await res.json();
       if (data.success) {
         setUser(data.user)
+        localStorage.setItem('token',data.token)
         toast.success(data.message)
         navigate("/home")
       }else{

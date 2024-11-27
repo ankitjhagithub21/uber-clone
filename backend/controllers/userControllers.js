@@ -53,9 +53,10 @@ const register = async(req,res) =>{
             secure:true,
             sameSite:"none",
             maxAge:1*24*60*60*1000 //1 day
-        }).status(201).json({success:true,message:"User registered successfully.",user:{
+        }).status(201).json({success:true,message:"User registered successfully.",token,user:{
             name,
             email
+            
         }})
 
     }catch(error){
@@ -93,7 +94,7 @@ const login = async(req,res) =>{
             secure:true,
             sameSite:"none",
             maxAge:1*24*60*60*1000 //1 day
-        }).status(200).json({success:true,message:`Welcome back ${user.name}`})
+        }).status(200).json({success:true,message:`Welcome back ${user.name}`,token})
 
 
 

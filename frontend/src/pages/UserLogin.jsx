@@ -22,11 +22,12 @@ const UserLogin = () => {
           "Content-Type": "application/json",
         },
         credentials:'include',
-        body: JSON.stringify({ name, email, password })
+        body: JSON.stringify({ email, password })
       })
       const data = await res.json();
       if (data.success) {
         setUser(data.user)
+        localStorage.setItem('token',data.token)
         toast.success(data.message)
         navigate("/home")
       }else{

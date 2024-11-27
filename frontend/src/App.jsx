@@ -6,6 +6,7 @@ import UserSignup from "./pages/UserSignup"
 import CaptainLogin from "./pages/CaptainLogin"
 import CaptainSignup from "./pages/CaptainSignup"
 import "./App.css"
+import ProtectedRoute from "./pages/ProtectedRoute"
 
 
 const App = () => {
@@ -15,7 +16,11 @@ const App = () => {
    <div>
     <Routes>
       <Route path="/" element={<Start/>}/>
-      <Route path="/home" element={<Home/>}/>
+      <Route path="/home" element={
+        <ProtectedRoute>
+          <Home/>
+        </ProtectedRoute>
+      }/>
       <Route path="/login" element={<UserLogin/>}/>
       <Route path="/signup" element={<UserSignup/>}/>
       <Route path="/captain-login" element={<CaptainLogin/>}/>

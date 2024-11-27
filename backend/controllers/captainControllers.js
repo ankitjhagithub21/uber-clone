@@ -60,7 +60,7 @@ const registerCaptain = async (req, res) => {
             secure: true,
             sameSite: "none",
             maxAge: 1 * 24 * 60 * 60 * 1000 //1 day
-        }).status(201).json({ success: true, message: "Captain registered successfully." })
+        }).status(201).json({ success: true, message: "Captain registered successfully." ,token})
 
     } catch (error) {
 
@@ -86,7 +86,7 @@ const loginCaptain = async (req, res) => {
         const validPassword = await bcrypt.compare(password, captain.password)
 
         if (!validPassword) {
-            return res.status(400).json({ success: false, message: "Wrong email or password." })
+            return res.status(400).json({ success: false, message: "Wrong email or password.",token })
         }
 
 
