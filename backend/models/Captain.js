@@ -16,6 +16,7 @@ const captainSchema = new Schema({
     password: {
         type: String,
         required: true,
+        select:false
     },
     socketId:{
         type:String
@@ -44,7 +45,7 @@ const captainSchema = new Schema({
         vehicleType:{
             type:String,
             required:true,
-            enum:['cart','motorcycle','auto']
+            enum:['car','motorcycle','auto']
         },
 
     },
