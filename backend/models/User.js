@@ -17,8 +17,11 @@ const userSchema = new Schema({
         type: String,
         required: true,
     },
+    socketId:{
+        type:String
+    }
     
-},{versionKey:false,timestamps:false});
+});
 
 const User = model("user", userSchema)
 
