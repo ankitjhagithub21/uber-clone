@@ -10,7 +10,7 @@ const Home = () => {
 
   return (
     <div className="relative w-full h-screen flex flex-col">
-      <img src="map.png" alt="map" className="w-full h-full object-cover" />
+      <img src="./map.png" alt="map" className="w-full h-full object-cover" />
       <div
         className={`absolute bottom-0 z-50 w-full bg-white p-5 transition-all duration-500 ease-in-out ${
           panelOpen ? 'h-full' : 'h-[30%]'
