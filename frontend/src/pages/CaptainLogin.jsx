@@ -1,15 +1,20 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import { useDispatch } from 'react-redux'
+import { setCaptain } from '../app/slices/userSlice'
 
 const CaptainLogin = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [loading,setLoading] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
 
     e.preventDefault()
- 
+
     setLoading(true)
 
     try {
@@ -18,21 +23,21 @@ const CaptainLogin = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        credentials:'include',
+        credentials: 'include',
         body: JSON.stringify({ email, password })
       })
       const data = await res.json();
       if (data.success) {
-
+        dispatch(setCaptain(data.captain))
         toast.success(data.message)
-        navigate("/captain-hone")
-      }else{
+        navigate("/captain-home")
+      } else {
         toast.error(data.message)
       }
 
     } catch (error) {
       console.log(error)
-      toast.error(data.message)
+      toast.error(error.message)
     } finally {
       setLoading(false)
     }
@@ -53,7 +58,7 @@ const CaptainLogin = () => {
 
         <button disabled={loading} type='submit' className='bg-black mt-5 text-white rounded p-2   w-full text-base'>
           {
-            loading ? 'Loading...' :'Login'
+            loading ? 'Loading...' : 'Login'
           }
         </button>
       </form>

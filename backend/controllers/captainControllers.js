@@ -67,7 +67,7 @@ const registerCaptain = async (req, res) => {
 
     } catch (error) {
 
-        res.status(500).json({ success: false, message: "Server error." })
+        res.status(500).json({ success: false, message: error.message })
     }
 }
 
@@ -89,7 +89,7 @@ const loginCaptain = async (req, res) => {
         const validPassword = await bcrypt.compare(password, captainExist.password)
 
         if (!validPassword) {
-            return res.status(400).json({ success: false, message: "Wrong email or password.",token })
+            return res.status(400).json({ success: false, message: "Wrong email or password."})
         }
 
 
@@ -109,7 +109,7 @@ const loginCaptain = async (req, res) => {
 
 
     } catch (error) {
-        res.status(500).json({ success: false, message: "Server error." })
+        res.status(500).json({ success: false, message: error.message })
     }
 }
 
@@ -127,7 +127,7 @@ const logoutCaptain = (req, res) => {
             maxAge: 0
         }).status(200).json({ success: true, message: "Logout Successfull." })
     } catch (error) {
-        res.status(500).json({ success: false, message: "Server error." })
+        res.status(500).json({ success: false, message: error.message })
     }
 }
 
