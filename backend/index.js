@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser')
 const connectDB = require('./db/conn')
 const userRouter = require('./routes/userRoutes')
 const captainRouter = require('./routes/captainRoutes')
+const mapRouter = require('./routes/mapRoutes')
 const app = express()
 const port = process.env.PORT || 3000
 
@@ -26,6 +27,7 @@ app.get('/', (req, res) => {
 
 app.use("/users",userRouter)
 app.use("/captains",captainRouter)
+app.use("/maps",mapRouter)
 
 app.listen(port, () => {
   console.log(`Server is listening on port ${port}`)
