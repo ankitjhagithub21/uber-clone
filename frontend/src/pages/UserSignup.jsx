@@ -1,6 +1,5 @@
-import { useContext, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { UserDataContext } from '../context/UserContext'
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
 const UserSignup = () => {
@@ -10,7 +9,6 @@ const UserSignup = () => {
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 
-  const { setUser } = useContext(UserDataContext)
   
   const handleSubmit = async (e) => {
 
@@ -28,8 +26,7 @@ const UserSignup = () => {
       })
       const data = await res.json();
       if (data.success) {
-        setUser(data.user)
-        localStorage.setItem('token',data.token)
+       
         toast.success(data.message)
         navigate("/home")
       }else{
@@ -49,13 +46,13 @@ const UserSignup = () => {
       <img src="logo.png" alt="uber_logo" className='h-6 mb-10' />
       <form onSubmit={handleSubmit}>
         <h3 className='text-sm mb-2'>What's Your name </h3>
-        <input type="text" value={name} onChange={(e) => setName(e.target.value)} className='bg-[#eeeeee] rounded px-4 py-2  placeholder:text-base w-full text-lg' placeholder='John Doe' required />
+        <input type="text" value={name} onChange={(e) => setName(e.target.value)} className='bg-[#eeeeee] rounded px-4 outline-black py-2  placeholder:text-base w-full text-lg' placeholder='John Doe' required />
 
         <h3 className='text-sm mt-5 mb-2'>What's Your email </h3>
-        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className='bg-[#eeeeee] rounded px-4 py-2  placeholder:text-base w-full text-lg' placeholder='email@example.com' required />
+        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className='bg-[#eeeeee] rounded px-4 outline-black py-2  placeholder:text-base w-full text-lg' placeholder='email@example.com' required />
 
         <h3 className='text-sm mt-5 mb-2'>Enter password</h3>
-        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className='bg-[#eeeeee] rounded px-4 py-2  placeholder:text-base w-full text-lg' placeholder='Example : Abc@123' required />
+        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className='bg-[#eeeeee] rounded px-4 outline-black py-2  placeholder:text-base w-full text-lg' placeholder='Example : Abc@123' required />
 
         <button disabled={loading} type='submit' className='bg-black mt-5 text-white rounded p-2   w-full text-base'>
           {

@@ -22,13 +22,13 @@ const CaptainSignup = () => {
       </div>
       <form onSubmit={handleSubmit}>
         <h3 className='text-sm mb-2'>What's Your name </h3>
-        <input type="name" value={name} onChange={(e) => setName(e.target.value)} className='bg-[#eeeeee] rounded px-4 py-2  placeholder:text-base w-full text-lg' placeholder='email@example.com' required />
+        <input type="name" value={name} onChange={(e) => setName(e.target.value)} className='bg-[#eeeeee] rounded px-4 outline-black py-2  placeholder:text-base w-full text-lg' placeholder='email@example.com' required />
 
         <h3 className='text-sm mt-5 mb-2'>What's Your email </h3>
-        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className='bg-[#eeeeee] rounded px-4 py-2  placeholder:text-base w-full text-lg' placeholder='email@example.com' required />
+        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className='bg-[#eeeeee] rounded px-4 outline-black py-2  placeholder:text-base w-full text-lg' placeholder='email@example.com' required />
 
         <h3 className='text-sm mt-5 mb-2'>Enter password</h3>
-        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className='bg-[#eeeeee] rounded px-4 py-2  placeholder:text-base w-full text-lg' placeholder='password' required />
+        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className='bg-[#eeeeee] rounded px-4 outline-black py-2  placeholder:text-base w-full text-lg' placeholder='password' required />
 
         <button type='submit' className='bg-black mt-5 text-white rounded p-2   w-full text-base'>Sign Up</button>
       </form>

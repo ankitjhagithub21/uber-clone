@@ -1,6 +1,5 @@
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { UserDataContext } from '../context/UserContext'
 import { toast } from 'react-toastify'
 
 const UserLogin = () => {
@@ -9,7 +8,7 @@ const UserLogin = () => {
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 
-  const { setUser } = useContext(UserDataContext)
+ 
   const handleSubmit = async (e) => {
 
     e.preventDefault()
@@ -26,8 +25,7 @@ const UserLogin = () => {
       })
       const data = await res.json();
       if (data.success) {
-        setUser(data.user)
-        localStorage.setItem('token',data.token)
+
         toast.success(data.message)
         navigate("/home")
       }else{
@@ -50,10 +48,10 @@ const UserLogin = () => {
       </div>
       <form onSubmit={handleSubmit}>
         <h3 className='text-sm mb-2'>What's Your email </h3>
-        <input type="email" value={email} onChange={(e)=>setEmail(e.target.value)} className='bg-[#eeeeee] rounded px-4 py-2  placeholder:text-base w-full text-lg' placeholder='email@example.com' required />
+        <input type="email" value={email} onChange={(e)=>setEmail(e.target.value)} className='bg-[#eeeeee] rounded px-4 py-2 outline-black  placeholder:text-base w-full text-lg' placeholder='email@example.com' required />
 
         <h3 className='text-sm mt-5 mb-2'>Enter password</h3>
-        <input type="password" value={password} onChange={(e)=>setPassword(e.target.value)} className='bg-[#eeeeee] rounded px-4 py-2  placeholder:text-base w-full text-lg' placeholder='password' required />
+        <input type="password" value={password} onChange={(e)=>setPassword(e.target.value)} className='bg-[#eeeeee] rounded px-4 py-2 outline-black  placeholder:text-base w-full text-lg' placeholder='password' required />
 
         <button type='submit' disabled={loading} className='bg-black mt-5 text-white rounded p-2   w-full text-base'>
           {

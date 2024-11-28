@@ -60,7 +60,10 @@ const registerCaptain = async (req, res) => {
             secure: true,
             sameSite: "none",
             maxAge: 1 * 24 * 60 * 60 * 1000 //1 day
-        }).status(201).json({ success: true, message: "Captain registered successfully." ,token})
+        }).status(201).json({ success: true, message: "Captain registered successfully." ,captain:{
+            name:savedCaptain.name,
+            email:savedCaptain.email,
+        }})
 
     } catch (error) {
 
@@ -77,27 +80,32 @@ const loginCaptain = async (req, res) => {
             return res.status(400).json({ success: false, message: "All fields are required." })
         }
 
-        const captain = await Captain.findOne({ email }).select("+password");
+        const captainExist = await Captain.findOne({ email }).select("+password");
 
-        if (!captain) {
-            return res.status(404).json({ success: false, message: "Captain not found." })
+        if (!captainExist) {
+            return res.status(404).json({ success: false, message: "Wrong email or password." })
         }
 
-        const validPassword = await bcrypt.compare(password, captain.password)
+        const validPassword = await bcrypt.compare(password, captainExist.password)
 
         if (!validPassword) {
             return res.status(400).json({ success: false, message: "Wrong email or password.",token })
         }
 
 
-        const token = generateToken(captain._id)
+        const token = generateToken(captainExist._id)
+
+        const captain = {
+            name:captainExist.name,
+            email:captainExist.email
+        }
 
         res.cookie('token', token, {
             httpOnly: true,
             secure: true,
             sameSite: "none",
             maxAge: 1 * 24 * 60 * 60 * 1000 //1 day
-        }).status(200).json({ success: true, message: `Welcome back ${captain.name}` })
+        }).status(200).json({ success: true, message: `Welcome back ${captain.name}`,captain })
 
 
     } catch (error) {
