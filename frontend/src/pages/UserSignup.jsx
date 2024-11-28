@@ -1,6 +1,8 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { useNavigate ,Link} from 'react-router-dom'
 import { toast } from 'react-toastify'
+import { setUser } from '../app/slices/userSlice'
 
 const UserSignup = () => {
   const [name, setName] = useState('')
@@ -8,6 +10,7 @@ const UserSignup = () => {
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   
   const handleSubmit = async (e) => {
@@ -26,7 +29,7 @@ const UserSignup = () => {
       })
       const data = await res.json();
       if (data.success) {
-       
+        dispatch(setUser(data.user))
         toast.success(data.message)
         navigate("/home")
       }else{

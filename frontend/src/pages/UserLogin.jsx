@@ -1,14 +1,17 @@
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import { setUser } from '../app/slices/userSlice'
 
 const UserLogin = () => {
-  const [email,setEmail] = useState('')
-  const [password,setPassword] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
- 
+
   const handleSubmit = async (e) => {
 
     e.preventDefault()
@@ -20,15 +23,15 @@ const UserLogin = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        credentials:'include',
+        credentials: 'include',
         body: JSON.stringify({ email, password })
       })
       const data = await res.json();
       if (data.success) {
-
+        dispatch(setUser(data.user))
         toast.success(data.message)
         navigate("/home")
-      }else{
+      } else {
         toast.error(data.message)
       }
 
@@ -48,20 +51,20 @@ const UserLogin = () => {
       </div>
       <form onSubmit={handleSubmit}>
         <h3 className='text-sm mb-2'>What's Your email </h3>
-        <input type="email" value={email} onChange={(e)=>setEmail(e.target.value)} className='bg-[#eeeeee] rounded px-4 py-2 outline-black  placeholder:text-base w-full text-lg' placeholder='email@example.com' required />
+        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className='bg-[#eeeeee] rounded px-4 py-2 outline-black  placeholder:text-base w-full text-lg' placeholder='email@example.com' required />
 
         <h3 className='text-sm mt-5 mb-2'>Enter password</h3>
-        <input type="password" value={password} onChange={(e)=>setPassword(e.target.value)} className='bg-[#eeeeee] rounded px-4 py-2 outline-black  placeholder:text-base w-full text-lg' placeholder='password' required />
+        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className='bg-[#eeeeee] rounded px-4 py-2 outline-black  placeholder:text-base w-full text-lg' placeholder='password' required />
 
         <button type='submit' disabled={loading} className='bg-black mt-5 text-white rounded p-2   w-full text-base'>
           {
             loading ? 'Loading...' : 'Login'
           }
-          </button>
+        </button>
       </form>
       <p className='text-center'>New here ? <Link to={"/signup"} className='text-blue-500 hover:underline'>Create an account</Link> </p>
       <Link to={"/captain-login"} className='bg-green-500 inline-block text-center hover:bg-green-600 mt-24 text-white rounded p-2   w-full text-base'>Sign in as captain</Link>
-      
+
     </div>
   )
 }
