@@ -10,14 +10,14 @@ import { Provider } from 'react-redux'
 createRoot(document.getElementById('root')).render(
   <Provider store={store}>
 
-    <BrowserRouter>
-      <App />
-      <ToastContainer
-        autoClose={3000}
-        hideProgressBar={true}
-        theme="dark"
-      />
-    </BrowserRouter>
+
+    <App />
+    <ToastContainer
+      autoClose={3000}
+      hideProgressBar={true}
+      theme="dark"
+    />
+
   </Provider>
 
 

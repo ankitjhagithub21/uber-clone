@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom"
+import { BrowserRouter, Route, Routes } from "react-router-dom"
 import Start from "./pages/Start"
 import Home from "./pages/Home"
 import UserLogin from "./pages/UserLogin"
@@ -6,29 +6,43 @@ import UserSignup from "./pages/UserSignup"
 import CaptainLogin from "./pages/CaptainLogin"
 import CaptainSignup from "./pages/CaptainSignup"
 import "./App.css"
-import ProtectedRoute from "./pages/ProtectedRoute"
+import ProtectedUserRoute from "./pages/ProtectedUserRoute"
 import CaptainHome from "./pages/CaptainHome"
+import ProtectedCaptainRoute from "./pages/ProtectedCaptainRoute"
+import PublicRoute from "./pages/PublicRoute"
 
 
 const App = () => {
 
 
   return (
-    <div>
+    <BrowserRouter>
       <Routes>
         <Route path="/" element={<Start />} />
         <Route path="/home" element={
-          <ProtectedRoute>
+          <ProtectedUserRoute>
             <Home />
-          </ProtectedRoute>
+          </ProtectedUserRoute>
         } />
-        <Route path="/login" element={<UserLogin />} />
-        <Route path="/signup" element={<UserSignup />} />
+        <Route path="/login" element={
+          <PublicRoute>
+            <UserLogin />
+          </PublicRoute>
+        } />
+        <Route path="/signup" element={
+          <PublicRoute>
+            <UserSignup />
+          </PublicRoute>
+        } />
         <Route path="/captain-login" element={<CaptainLogin />} />
         <Route path="/captain-signup" element={<CaptainSignup />} />
-        <Route path="/captain-home" element={<CaptainHome />} />
+        <Route path="/captain-home" element={
+          <ProtectedCaptainRoute>
+            <CaptainHome />
+          </ProtectedCaptainRoute>
+        } />
       </Routes>
-    </div>
+    </BrowserRouter>
   )
 }
 
