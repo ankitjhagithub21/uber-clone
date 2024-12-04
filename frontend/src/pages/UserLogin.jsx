@@ -54,9 +54,9 @@ const UserLogin = () => {
         <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className='bg-[#eeeeee] rounded px-4 py-2 outline-black  placeholder:text-base w-full text-lg' placeholder='email@example.com' required />
 
         <h3 className='text-sm mt-5 mb-2'>Enter password</h3>
-      <div className='bg-[#eeeeee] rounded px-4 py-2 outline-black  placeholder:text-base w-full text-lg'>
-      <input type="password" value={password} className='w-full ' onChange={(e) => setPassword(e.target.value)}  placeholder='password' required />
-      </div>
+      
+          <input type="password" value={password} className='bg-[#eeeeee] rounded px-4 py-2 outline-black  placeholder:text-base w-full text-lg' onChange={(e) => setPassword(e.target.value)} placeholder='password' required />
+       
 
         <button type='submit' disabled={loading} className='bg-black mt-5 text-white rounded p-2   w-full text-base'>
           {
