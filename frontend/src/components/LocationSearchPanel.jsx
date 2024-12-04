@@ -2,7 +2,7 @@ import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import Location from "./Location";
 import { useEffect, useState } from "react";
 
-const LocationSearchPanel = ({ panelOpen, setPanelOpen ,setTrip}) => {
+const LocationSearchPanel = ({ panelOpen, setPanelOpen ,setTrip,setFares}) => {
   const [pickup, setPickup] = useState("");
   const [destination, setDestination] = useState("");
   const [suggestions, setSuggestions] = useState([]);
@@ -57,10 +57,29 @@ const LocationSearchPanel = ({ panelOpen, setPanelOpen ,setTrip}) => {
      
   }
 
-  const findTrip = (e) => {
+  const findTrip = async(e) => {
       e.preventDefault();
       setPanelOpen(false)
       setTrip(true)
+      
+      try{
+        const res = await fetch(`${import.meta.env.VITE_BASE_URL}/rides/get-fare`,{
+          method:"POST",
+          headers:{
+            "Content-Type":"application/json",
+          },
+          credentials:'include',
+          body:JSON.stringify({pickup,destination})
+        })
+        const data = await res.json()
+        if(data.success){
+          setFares(data.fares)
+        }else{
+          setFares(null)
+        }
+      }catch(error){
+        console.log(error)
+      }
   }
 
   return (
