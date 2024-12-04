@@ -13,7 +13,7 @@ const Home = () => {
       {
         <LocationSearchPanel panelOpen={panelOpen} setPanelOpen={setPanelOpen} setTrip={setTrip} setFares={setFares}/>
       }
-      <ChooseVehicle trip={trip} setTrip={setTrip} fares={fares}/>
+      <ChooseVehicle trip={trip} setTrip={setTrip} setPanel={setPanelOpen} fares={fares}/>
     </div>
   );
 };

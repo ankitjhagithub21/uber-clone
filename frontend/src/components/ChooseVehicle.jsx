@@ -1,15 +1,23 @@
 import React from "react";
 import { FaUser } from "react-icons/fa";
+import { IoIosArrowDown } from "react-icons/io";
 
-const ChooseVehicle = ({ trip, setTrip, fares }) => {
+const ChooseVehicle = ({ trip, setTrip, fares, setPanel }) => {
   return (
     <div
       className={`absolute bottom-0 w-full bg-white p-5 h-[60vh] transition-all duration-500 ease-in-out ${
         trip ? "translate-y-0" : "translate-y-full"
       }`}
     >
-      <div className="mb-5">
-        <h1 className="text-2xl">Choose a vehicle</h1>
+      <div className="mb-5 flex items-center justify-between">
+        <h1 className="text-2xl font-semibold">Choose a vehicle</h1>
+        <IoIosArrowDown
+          size={23}
+          onClick={() => {
+            setTrip(false);
+            setPanel(true);
+          }}
+        />
       </div>
 
       <div>
@@ -30,7 +38,7 @@ const ChooseVehicle = ({ trip, setTrip, fares }) => {
           <img className="h-10" src="./moto.webp" alt="motorcycle" />
           <div className="-ml-2 w-1/2">
             <h4 className="font-medium text-base flex items-center gap-1">
-              Moto <FaUser size={14}/> 1
+              Moto <FaUser size={14} /> 1
             </h4>
             <h5 className="font-medium text-sm">3 mins away </h5>
             <p className="font-normal text-xs text-gray-600">
@@ -43,7 +51,7 @@ const ChooseVehicle = ({ trip, setTrip, fares }) => {
           <img className="h-10" src="./auto.webp" alt="auto" />
           <div className="ml-2 w-1/2">
             <h4 className="font-medium text-base flex items-center gap-1">
-              UberAuto <FaUser size={14}/> 3
+              UberAuto <FaUser size={14} /> 3
             </h4>
             <h5 className="font-medium text-sm">3 mins away </h5>
             <p className="font-normal text-xs text-gray-600">
