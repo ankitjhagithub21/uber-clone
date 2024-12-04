@@ -88,16 +88,26 @@ const getAutocompleteSuggestions = async (query) => {
         throw new Error("Query is required for autocomplete suggestions.");
     }
 
-    
     const url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(query)}&key=${process.env.GOOGLE_MAPS_SUGG_API}`;
 
     try {
         const response = await fetch(url);
         const data = await response.json();
-       
-        return data;
+
+        if (!data || !data.predictions) {
+            throw new Error("No suggestions found.");
+        }
+
+        // Extracting suggestions
+        const suggestions = data.predictions.map((prediction) => ({
+            description: prediction.description,
+            placeId: prediction.place_id, // Useful for further queries like geocoding
+        }));
+
+        return suggestions;
     } catch (error) {
         console.error("Error fetching autocomplete suggestions:", error);
+        throw new Error("Failed to fetch autocomplete suggestions.");
     }
 };
 
