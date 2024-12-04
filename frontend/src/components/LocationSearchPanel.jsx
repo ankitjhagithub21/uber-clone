@@ -2,11 +2,12 @@ import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import Location from "./Location";
 import { useEffect, useState } from "react";
 
-const LocationSearchPanel = ({ panelOpen, setPanelOpen }) => {
+const LocationSearchPanel = ({ panelOpen, setPanelOpen ,setTrip}) => {
   const [pickup, setPickup] = useState("");
   const [destination, setDestination] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [activeField, setActiveField] = useState(""); // Track which input is active
+  const [debounceTimeout, setDebounceTimeout] = useState(null); // Timeout for debouncing
 
   useEffect(() => {
     const getSuggestions = async (address) => {
@@ -27,12 +28,40 @@ const LocationSearchPanel = ({ panelOpen, setPanelOpen }) => {
     };
 
     // Trigger suggestion fetch based on the active field (pickup or destination)
-    if (activeField === "pickup" && pickup.trim() !== "") {
-      getSuggestions(pickup);
-    } else if (activeField === "destination" && destination.trim() !== "") {
-      getSuggestions(destination);
-    }
+    const handleDebouncedFetch = () => {
+      if (debounceTimeout) clearTimeout(debounceTimeout); // Clear the previous timeout
+      const newTimeout = setTimeout(() => {
+        if (activeField === "pickup" && pickup.trim() !== "") {
+          getSuggestions(pickup);
+        } else if (activeField === "destination" && destination.trim() !== "") {
+          getSuggestions(destination);
+        }
+      }, 500); // Debounce delay (e.g., 500ms)
+      setDebounceTimeout(newTimeout);
+    };
+
+    handleDebouncedFetch();
+
+    // Cleanup on component unmount or change in dependency
+    return () => {
+      if (debounceTimeout) clearTimeout(debounceTimeout);
+    };
   }, [pickup, destination, activeField]);
+
+  const onLocationClick = (address) => {
+     if(activeField==="pickup"){
+       setPickup(address)
+     }else{
+      setDestination(address)
+     }
+     
+  }
+
+  const findTrip = (e) => {
+      e.preventDefault();
+      setPanelOpen(false)
+      setTrip(true)
+  }
 
   return (
     <div
@@ -50,7 +79,7 @@ const LocationSearchPanel = ({ panelOpen, setPanelOpen }) => {
           )}
         </button>
       </div>
-      <form className="flex flex-col gap-3">
+      <form className="flex flex-col gap-3" onSubmit={findTrip}>
         <input
           type="text"
           placeholder="Add a pick-up location"
@@ -64,6 +93,7 @@ const LocationSearchPanel = ({ panelOpen, setPanelOpen }) => {
             setActiveField("pickup");
           }}
           className="py-2 px-6 rounded-lg outline-none bg-gray-100"
+          required
         />
         <input
           type="text"
@@ -78,13 +108,17 @@ const LocationSearchPanel = ({ panelOpen, setPanelOpen }) => {
             setActiveField("destination");
           }}
           className="py-2 px-6 rounded-lg outline-none bg-gray-100"
+          required
         />
+        {
+          panelOpen && <button className="rounded-lg bg-gray-800 text-white p-2">Find Trip</button>
+        }
       </form>
       {/* Display fetched suggestions */}
       {panelOpen && suggestions.length > 0 && (
         <div className="mt-10">
           {suggestions.map((suggestion, index) => (
-            <Location key={index} description={suggestion.description} />
+            <Location key={index} description={suggestion.description} onClick={onLocationClick} />
           ))}
         </div>
       )}

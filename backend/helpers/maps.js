@@ -1,26 +1,26 @@
 const apiKey = process.env.GOOGLE_MAPS_API;
 
 const getAddressCoordinate = async (address) => {
-
-
-    const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${apiKey}`
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${apiKey}`;
     try {
-        const res = await fetch(url)
-        const data = await res.json()
-       
-        const location = data.results[0].geometry.location
+        const res = await fetch(url);
+        const data = await res.json();
+
+        if (!data || !data.results || data.results.length === 0) {
+            throw new Error("No results found for the provided address.");
+        }
+
+        const location = data.results[0].geometry.location;
         return {
-            ltd: location.lat,
-            lng: location.lng
+            lat: location.lat,
+            lng: location.lng,
         };
-        return data;
+        
     } catch (error) {
-        console.log(error)
+        console.error("Error fetching address coordinates:", error.message);
+        throw new Error("Failed to retrieve address coordinates.");
     }
-}
-
-
-
+};
 
 const calculateDistanceAndTime = async (pickup, destination, vehicleType) => {
     if (!pickup || !destination) {
@@ -28,7 +28,6 @@ const calculateDistanceAndTime = async (pickup, destination, vehicleType) => {
     }
 
     try {
-        // Speeds for different vehicle types (in km/h)
         const vehicleSpeeds = {
             car: 50,
             auto: 30,
@@ -40,22 +39,14 @@ const calculateDistanceAndTime = async (pickup, destination, vehicleType) => {
             throw new Error("Invalid vehicle type. Valid options are: car, auto, motorcycle.");
         }
 
-        // Get coordinates of pickup and destination addresses
         const pickupCoordinates = await getAddressCoordinate(pickup);
         const destinationCoordinates = await getAddressCoordinate(destination);
 
-        if (!pickupCoordinates || !destinationCoordinates) {
-            throw new Error("Failed to retrieve coordinates for one or both addresses.");
-        }
-
         const toRadians = (degrees) => degrees * (Math.PI / 180);
-
-        // Destructure latitudes and longitudes
-        const { ltd: lat1, lng: lon1 } = pickupCoordinates;
-        const { ltd: lat2, lng: lon2 } = destinationCoordinates;
+        const { lat: lat1, lng: lon1 } = pickupCoordinates;
+        const { lat: lat2, lng: lon2 } = destinationCoordinates;
 
         const R = 6371; // Radius of the Earth in km
-
         const dLat = toRadians(lat2 - lat1);
         const dLon = toRadians(lon2 - lon1);
 
@@ -68,12 +59,11 @@ const calculateDistanceAndTime = async (pickup, destination, vehicleType) => {
 
         const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         const distance = R * c; // Distance in km
-
         const timeInMinutes = (distance / averageSpeed) * 60; // Time in minutes
 
         return {
-            distance: Math.round(distance * 100) / 100, // Round to 2 decimal places
-            time: Math.round(timeInMinutes * 100) / 100, // Round to 2 decimal places
+            distance: Math.round(distance * 100) / 100,
+            time: Math.round(timeInMinutes * 100) / 100,
         };
     } catch (error) {
         console.error("Error in calculateDistanceAndTime:", error.message);
@@ -81,7 +71,35 @@ const calculateDistanceAndTime = async (pickup, destination, vehicleType) => {
     }
 };
 
+const calculateFare = async (pickup, destination, vehicleType) => {
+    if (!pickup || !destination || !vehicleType) {
+        throw new Error("Pickup, destination, and vehicle type are required.");
+    }
 
+    const rates = {
+        car: { baseFare: 50, perKm: 12, perMin: 3 },
+        auto: { baseFare: 30, perKm: 8, perMin: 2 },
+        motorcycle: { baseFare: 20, perKm: 5, perMin: 1 },
+    };
+
+    const selectedRate = rates[vehicleType.toLowerCase()];
+    if (!selectedRate) {
+        throw new Error("Invalid vehicle type. Choose from car, auto, or motorcycle.");
+    }
+
+    try {
+        const data = await calculateDistanceAndTime(pickup, destination, vehicleType);
+        const fare =
+            selectedRate.baseFare +
+            data.distance * selectedRate.perKm +
+            data.time * selectedRate.perMin;
+
+        return Math.round(fare * 100) / 100;
+    } catch (error) {
+        console.error("Error in calculateFare:", error.message);
+        throw new Error("Failed to calculate fare.");
+    }
+};
 
 const getAutocompleteSuggestions = async (query) => {
     if (!query) {
@@ -89,7 +107,6 @@ const getAutocompleteSuggestions = async (query) => {
     }
 
     const url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(query)}&key=${process.env.GOOGLE_MAPS_SUGG_API}`;
-
     try {
         const response = await fetch(url);
         const data = await response.json();
@@ -98,24 +115,19 @@ const getAutocompleteSuggestions = async (query) => {
             throw new Error("No suggestions found.");
         }
 
-        // Extracting suggestions
-        const suggestions = data.predictions.map((prediction) => ({
+        return data.predictions.map((prediction) => ({
             description: prediction.description,
-            placeId: prediction.place_id, // Useful for further queries like geocoding
+            placeId: prediction.place_id,
         }));
-
-        return suggestions;
     } catch (error) {
-        console.error("Error fetching autocomplete suggestions:", error);
+        console.error("Error fetching autocomplete suggestions:", error.message);
         throw new Error("Failed to fetch autocomplete suggestions.");
     }
 };
 
-
-
-
 module.exports = {
     getAddressCoordinate,
     calculateDistanceAndTime,
+    calculateFare,
     getAutocompleteSuggestions,
 };
