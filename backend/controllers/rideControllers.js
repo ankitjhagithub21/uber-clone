@@ -1,6 +1,12 @@
-const { getDistanceAndTime } = require("../helpers/maps");
+const { calculateDistanceAndTime } = require("../helpers/maps");
 const Ride = require("../models/Ride");
+const crypto = require('crypto')
 
+
+const genOtp = (num) =>{
+    const otp = crypto.randomInt(Math.pow(10,num-1),Math.pow(10,num)).toString()
+    return otp;
+}
 
 const getFare = async (pickup, destination, vehicleType) => {
     if (!pickup || !destination || !vehicleType) {
@@ -23,26 +29,15 @@ const getFare = async (pickup, destination, vehicleType) => {
 
     try {
        
-        const data = await getDistanceAndTime(pickup,destination);
+        const data = await calculateDistanceAndTime(pickup,destination,vehicleType);
 
-        if (data.status !== "OK") {
-            throw new Error(data.error_message || "Error fetching distance and time from Google Maps.");
-        }
-
-        const element = data.rows[0].elements[0];
-        if (element.status !== "OK") {
-            throw new Error("Invalid pickup or destination.");
-        }
-
-        // Extract distance and duration
-        const distanceInKm = element.distance.value / 1000; // Convert meters to kilometers
-        const timeInMinutes = element.duration.value / 60; // Convert seconds to minutes
+    
 
         // Calculate fare
         const fare =
             selectedRate.baseFare +
-            distanceInKm * selectedRate.perKm +
-            timeInMinutes * selectedRate.perMin;
+            data.distance * selectedRate.perKm +
+            data.time * selectedRate.perMin;
 
         return Math.round(fare * 100) / 100; // Round to 2 decimal places
     } catch (error) {
@@ -65,7 +60,7 @@ const createRide = async (req, res) => {
             user:req.user._id,
             pickup,
             destination,
-            vehicleType,
+            otp:genOtp(6),
             fare
         });
 

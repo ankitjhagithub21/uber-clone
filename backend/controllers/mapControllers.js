@@ -1,4 +1,5 @@
-const { getAddressCoordinate, getDistanceAndTime, getAutocompleteSuggestions } = require("../helpers/maps");
+const { getAddressCoordinate, getAutocompleteSuggestions, calculateDistanceAndTime } = require("../helpers/maps");
+
 
 
 const getCoordinates = async (req, res) => {
@@ -15,17 +16,28 @@ const getCoordinates = async (req, res) => {
 }
 
 const getDistanceTime = async (req, res) => {
-    const { origin, destination } = req.query;
+    const { origin, destination, vehicleType } = req.query;
+
     try {
+        if (!origin || !destination || !vehicleType) {
+            return res
+                .status(400)
+                .json({ success: false, message: "Origin, destination, and vehicle type are required." });
+        }
 
-        const data = await getDistanceAndTime(origin, destination)
-        res.status(200).json(data)
-
+        const data = await calculateDistanceAndTime(origin, destination, vehicleType);
+        res.status(200).json({
+            success: true,
+            distance: `${data.distance} km`,
+            time: `${data.time} minutes`,
+            vehicleType,
+        });
+        
     } catch (error) {
-       
-        res.status(500).json({ success: false, message: error.message })
+        res.status(500).json({ success: false, message: error.message });
     }
-}
+};
+
 
 const getSuggestions = async (req, res) => {
     const { input } = req.query;

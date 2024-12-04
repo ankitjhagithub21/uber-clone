@@ -51,6 +51,11 @@ const rideSchema = new Schema({
     },
     signature:{
         type:String
+    },
+    otp:{
+        type:String,
+        select:false,
+        required:true
     }
 });
 
