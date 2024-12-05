@@ -29,7 +29,6 @@ const UserLogin = () => {
       const data = await res.json();
       if (data.success) {
         dispatch(setUser(data.user))
-        toast.success(data.message)
         navigate("/home")
       } else {
         toast.error(data.message)

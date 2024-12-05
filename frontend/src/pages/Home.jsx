@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import LocationSearchPanel from "../components/LocationSearchPanel";
 import ChooseVehicle from "../components/ChooseVehicle";
 import ConfirmRide from "../components/ConfirmRide";
+import LookingForRider from "../components/LookingForRider";
 
 const Home = () => {
   const [panelOpen, setPanelOpen] = useState(false);
@@ -12,9 +13,10 @@ const Home = () => {
   const [destination, setDestination] = useState("");
   const [isOpen,setIsOpen] = useState(false)
   const [fare,setFare] = useState(null)
+  const [ride,setRide] = useState(null)
 
   return (
-    <div className="relative w-full h-screen flex flex-col">
+    <div className="relative w-full h-screen overflow-hidden flex flex-col">
       <img src="./map.png" alt="map" className="w-full h-full object-cover" />
 
       {
@@ -39,7 +41,9 @@ const Home = () => {
         setFare={setFare}
       />
 
-      <ConfirmRide setTrip={setTrip} isOpen={isOpen} setIsOpen={setIsOpen} vehicleType={vehicleType} pickup={pickup} destination={destination} fare={fare}/>
+      <ConfirmRide setTrip={setTrip} isOpen={isOpen} setIsOpen={setIsOpen} vehicleType={vehicleType} pickup={pickup} destination={destination} fare={fare} setRide={setRide}/>
+      
+      <LookingForRider ride={ride} vehicleType={vehicleType}/>
     </div>
   );
 };
