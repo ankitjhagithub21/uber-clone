@@ -2,7 +2,7 @@ import React from "react";
 import { FaUser } from "react-icons/fa";
 import { IoIosArrowDown } from "react-icons/io";
 
-const ChooseVehicle = ({ trip, setTrip, fares, setPanel }) => {
+const ChooseVehicle = ({ trip, setTrip, fares, setPanel,setVehicleType,setIsOpen,setFare }) => {
   return (
     <div
       className={`absolute bottom-0 w-full bg-white p-5 h-[60vh] transition-all duration-500 ease-in-out ${
@@ -21,7 +21,14 @@ const ChooseVehicle = ({ trip, setTrip, fares, setPanel }) => {
       </div>
 
       <div>
-        <div className="flex border-2 active:border-black  mb-2 rounded-xl w-full p-3  items-center justify-between">
+        <div className="flex border-2 active:border-black  mb-2 rounded-xl w-full p-3  items-center justify-between" onClick={()=>{
+          setVehicleType('car')
+          setFare(fares.car)
+         setTrip(false) 
+         setIsOpen(true)
+         
+         
+        }}>
           <img className="h-10" src="./car.jpg" alt="car" />
           <div className="ml-2 w-1/2">
             <h4 className="font-medium text-base flex items-center gap-1">
@@ -34,7 +41,12 @@ const ChooseVehicle = ({ trip, setTrip, fares, setPanel }) => {
           </div>
           <h2 className="text-lg font-semibold">₹{fares?.car}</h2>
         </div>
-        <div className="flex border-2 active:border-black mb-2 rounded-xl w-full p-3  items-center justify-between">
+        <div className="flex border-2 active:border-black mb-2 rounded-xl w-full p-3  items-center justify-between" onClick={()=>{
+          setVehicleType('motorcycle')
+          setFare(fares.motorcycle)
+         setTrip(false) 
+         setIsOpen(true)
+        }}>
           <img className="h-10" src="./moto.webp" alt="motorcycle" />
           <div className="-ml-2 w-1/2">
             <h4 className="font-medium text-base flex items-center gap-1">
@@ -47,7 +59,13 @@ const ChooseVehicle = ({ trip, setTrip, fares, setPanel }) => {
           </div>
           <h2 className="text-lg font-semibold">₹{fares?.motorcycle}</h2>
         </div>
-        <div className="flex border-2 active:border-black mb-2 rounded-xl w-full p-3  items-center justify-between">
+        <div className="flex border-2 active:border-black mb-2 rounded-xl w-full p-3  items-center justify-between" onClick={()=>{
+          setVehicleType('auto')
+          setFare(fares.auto)
+         setTrip(false) 
+         setIsOpen(true)
+         
+        }}>
           <img className="h-10" src="./auto.webp" alt="auto" />
           <div className="ml-2 w-1/2">
             <h4 className="font-medium text-base flex items-center gap-1">

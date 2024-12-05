@@ -2,9 +2,8 @@ import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import Location from "./Location";
 import { useEffect, useState } from "react";
 
-const LocationSearchPanel = ({ panelOpen, setPanelOpen ,setTrip,setFares}) => {
-  const [pickup, setPickup] = useState("");
-  const [destination, setDestination] = useState("");
+const LocationSearchPanel = ({pickup,setPickup,destination,setDestination, panelOpen, setPanelOpen ,setTrip,setFares}) => {
+ 
   const [suggestions, setSuggestions] = useState([]);
   const [activeField, setActiveField] = useState(""); // Track which input is active
   const [debounceTimeout, setDebounceTimeout] = useState(null); // Timeout for debouncing
